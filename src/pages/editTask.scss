@@ -1,0 +1,39 @@
+@charset "utf-8";
+@use "../global/variables" as var;
+@use "../global/mixins" as mix;
+
+.edit-task {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.edit-task-form {
+  color: var.$secondary-color;
+}
+
+.edit-task-title,
+.edit-task-detail {
+  width: var.$form-width;
+  margin-bottom: var.$margin-bottom;
+}
+
+.delete-task-button {
+  color: var.$error-color;
+  border: solid 1px var.$error-color;
+  width: var.$button-width;
+  height: var.$button-height;
+  margin: var.$margin-bottom var.$margin-5px;
+  border-radius: var.$button-radius;
+}
+
+.edit-task-button {
+  background-color: var.$primary-color;
+  color: var.$white-color;
+  width: var.$button-width;
+  height: var.$button-height;
+  border-radius: var.$button-radius;
+}
+
+.error-message {
+  color: var.$error-color;
+}

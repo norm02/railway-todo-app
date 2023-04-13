@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+@use "../global/variables" as var;
+@use "../global/mixins" as mix;
+
+.new-list {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.new-list-form {
+  color: var.$secondary-color;
+}
+
+.new-list-title {
+  width: var.$form-width;
+  margin-bottom: var.$margin-bottom;
+}
+
+.new-list-button {
+  background-color: var.$primary-color;
+  color: var.$white-color;
+  width: var.$button-width;
+  height: var.$button-height;
+  border-radius: var.$button-radius;
+}

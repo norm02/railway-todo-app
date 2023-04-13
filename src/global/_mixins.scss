@@ -1,0 +1,7 @@
+$header-display: flex;
+$header-justify-content: space-between;
+
+@mixin header-position {
+  display: $header-display;
+  justify-content: $header-justify-content;
+}
