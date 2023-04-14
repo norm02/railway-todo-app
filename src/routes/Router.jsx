@@ -19,6 +19,9 @@ export const AppRouter = () => {
         <Route path="/signup" element={<SignUp />} />
         {auth ? (
           <>
+            {
+              // authがtrueの場合：Home, NewTask, NewList, EditTask, EditListのルーティングを許可する
+            }
             <Route index path="/" element={<Home />} />
             <Route path="/task/new" element={<NewTask />} />
             <Route path="/list/new" element={<NewList />} />
@@ -26,11 +29,15 @@ export const AppRouter = () => {
             <Route path="/lists/:listId/edit" element={<EditList />} />
           </>
         ) : (
+          // authがfalseの場合：/signinにリダイレクトする
           <Route
             path="/*"
             element={<Navigate to="/signin" replace state={{ from: "*" }} />}
           />
         )}
+        {
+          // どのルーティングにも当てはまらない場合：NotFoundページを表示する
+        }
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
