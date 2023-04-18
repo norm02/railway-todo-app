@@ -5,6 +5,8 @@ import { useCookies } from "react-cookie";
 import { url } from "../const";
 import { useNavigate, useParams } from "react-router-dom";
 import "./editTask.scss";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export const EditTask = () => {
   const navigate = useNavigate();
@@ -12,14 +14,14 @@ export const EditTask = () => {
   const [cookies] = useCookies();
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
-  const [isDone, setIsDone] = useState();
-  const [deadline, setDeadline] = useState("");
+  const [deadline, setDeadline] = useState(new Date());
   const [formatDeadline, setformatDeadline] = useState("");
+  const [isDone, setIsDone] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleIsDoneChange = (e) => setIsDone(e.target.value === "done");
-  const handleDeadlineChange = (e) => setDeadline(e.target.value);
+  const handleDeadlineChange = (date) => setDeadline(date);
   const onUpdateTask = () => {
     console.log(isDone);
     const data = {
@@ -126,7 +128,7 @@ export const EditTask = () => {
               name="status"
               value="todo"
               onChange={handleIsDoneChange}
-              checked={isDone === false ? "checked" : ""}
+              checked={!isDone}
             />
             未完了
             <input
@@ -142,14 +144,17 @@ export const EditTask = () => {
           <br />
           <label>期限</label>
           <br />
-          <input
-            type="datetime-local"
+          <DatePicker
+            selected={deadline}
             onChange={handleDeadlineChange}
-            className="edit-task-deadline"
-            value={deadline}
+            className="new-task-deadline"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="yyyy/MM/dd HH:mm"
           />
-          {formatDeadline && <p>残り日時: {formatDeadline}</p>}
           <br />
+          <p className="remaining-time">期限まで残り時間: {formatDeadline}</p>
           <button
             type="button"
             className="delete-task-button"
