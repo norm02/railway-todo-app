@@ -13,16 +13,20 @@ export const EditTask = () => {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
   const [isDone, setIsDone] = useState();
+  const [deadline, setDeadline] = useState("");
+  const [formatDeadline, setformatDeadline] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleIsDoneChange = (e) => setIsDone(e.target.value === "done");
+  const handleDeadlineChange = (e) => setDeadline(e.target.value);
   const onUpdateTask = () => {
     console.log(isDone);
     const data = {
       title,
       detail,
       done: isDone,
+      deadline,
     };
 
     axios
@@ -67,11 +71,28 @@ export const EditTask = () => {
         setTitle(task.title);
         setDetail(task.detail);
         setIsDone(task.done);
+        setDeadline(task.deadline);
       })
       .catch((err) => {
         setErrorMessage(`タスク情報の取得に失敗しました。${err}`);
       });
   }, []);
+
+  useEffect(() => {
+    const calculateRemainingTime = () => {
+      if (deadline) {
+        const now = new Date();
+        const deadlineDate = new Date(deadline);
+        const diff = Math.floor(deadlineDate - now) / 60000;
+        const days = Math.floor(diff / 1440);
+        const hours = Math.floor((diff % 1440) / 60);
+        const minutes = Math.floor(diff % 60);
+
+        setformatDeadline(`${days}日${hours}時間${minutes}分`);
+      }
+    };
+    calculateRemainingTime();
+  }, [deadline]);
 
   return (
     <div>
@@ -118,6 +139,17 @@ export const EditTask = () => {
             />
             完了
           </div>
+          <br />
+          <label>期限</label>
+          <br />
+          <input
+            type="datetime-local"
+            onChange={handleDeadlineChange}
+            className="edit-task-deadline"
+            value={deadline}
+          />
+          {formatDeadline && <p>残り日時: {formatDeadline}</p>}
+          <br />
           <button
             type="button"
             className="delete-task-button"

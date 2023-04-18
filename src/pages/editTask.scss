@@ -16,6 +16,10 @@
   width: var.$form-width;
   margin-bottom: var.$margin-bottom;
 }
+.edit-remaining-time {
+  width: var.$form-width;
+  margin-bottom: var.$margin-bottom;
+}
 
 .delete-task-button {
   color: var.$error-color;
@@ -24,6 +28,11 @@
   height: var.$button-height;
   margin: var.$margin-bottom var.$margin-5px;
   border-radius: var.$button-radius;
+}
+
+.edit-task-deadline {
+  width: var.$form-width;
+  margin-bottom: var.$margin-bottom;
 }
 
 .edit-task-button {
