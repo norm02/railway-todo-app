@@ -5,7 +5,6 @@ import axios from "axios";
 import { Header } from "../components/Header";
 import { url } from "../const";
 import "./home.scss";
-import { useMediaQuery } from "react-responsive";
 
 export const Home = () => {
   const [isDoneDisplay, setIsDoneDisplay] = useState("todo"); // todo->未完了 done->完了
@@ -15,12 +14,6 @@ export const Home = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [cookies] = useCookies();
   const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value);
-
-  const isDesktopOrLaptop = useMediaQuery({
-    query: "(min-width: 1224px)",
-  });
-  const isTablet = useMediaQuery({ query: "(max-width: 768px)" });
-  const isSmartphone = useMediaQuery({ query: "(max-width: 375px)" });
 
   useEffect(() => {
     axios
@@ -73,12 +66,7 @@ export const Home = () => {
   };
   return (
     <div>
-      <div>
-        <h1>Device Test!</h1>
-        {isDesktopOrLaptop && <p>You are a desktop or laptop</p>}
-        {isTablet && <p>You have a Tablet</p>}
-        {isSmartphone && <p>You are a Smartphone</p>}
-      </div>
+      <div></div>
       <Header />
       <main className="taskList">
         <p className="error-message">{errorMessage}</p>
