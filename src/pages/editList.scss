@@ -4,11 +4,15 @@
 @use "../global/mixins" as mix;
 
 .edit-list {
-  width: 1000px;
-  margin: 0 auto;
+  // width: 1000px;
+  // margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
 
   .edit-list-form {
     color: var.$secondary-color;
+    flex: 1;
 
     .edit-list-title {
       width: var.$form-width;

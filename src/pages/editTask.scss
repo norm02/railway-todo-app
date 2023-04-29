@@ -3,12 +3,16 @@
 @use "../global/mixins" as mix;
 
 .edit-task {
-  width: 1000px;
-  margin: 0 auto;
+  //width: 1000px;
+  //margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .edit-task-form {
   color: var.$secondary-color;
+  flex: 1;
 }
 
 .edit-task-title,
