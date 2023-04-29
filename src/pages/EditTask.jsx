@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import axios from "axios";
+import dayjs from "dayjs";
 import { useCookies } from "react-cookie";
 import { url } from "../const";
 import { useNavigate, useParams } from "react-router-dom";
 import "./editTask.scss";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export const EditTask = () => {
@@ -14,21 +14,22 @@ export const EditTask = () => {
   const [cookies] = useCookies();
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
-  const [deadline, setDeadline] = useState(new Date());
+  const [limit, setLimit] = useState("");
   const [formatDeadline, setformatDeadline] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
+  const handleLimitChange = (e) =>
+    setLimit(dayjs(e.target.value).format("YYYY-MM-DDTHH:mm:ss[Z]"));
   const handleIsDoneChange = (e) => setIsDone(e.target.value === "done");
-  const handleDeadlineChange = (date) => setDeadline(date);
   const onUpdateTask = () => {
     console.log(isDone);
     const data = {
       title,
       detail,
       done: isDone,
-      deadline,
+      limit,
     };
 
     axios
@@ -73,7 +74,7 @@ export const EditTask = () => {
         setTitle(task.title);
         setDetail(task.detail);
         setIsDone(task.done);
-        setDeadline(task.deadline);
+        setLimit(task.limit);
       })
       .catch((err) => {
         setErrorMessage(`タスク情報の取得に失敗しました。${err}`);
@@ -81,20 +82,23 @@ export const EditTask = () => {
   }, []);
 
   useEffect(() => {
-    const calculateRemainingTime = () => {
-      if (deadline) {
-        const now = new Date();
-        const deadlineDate = new Date(deadline);
-        const diff = Math.floor(deadlineDate - now) / 60000;
-        const days = Math.floor(diff / 1440);
-        const hours = Math.floor((diff % 1440) / 60);
-        const minutes = Math.floor(diff % 60);
-
-        setformatDeadline(`${days}日${hours}時間${minutes}分`);
-      }
-    };
-    calculateRemainingTime();
-  }, [deadline]);
+    axios
+      .get(`${url}/lists/${listId}/tasks/${taskId}`, {
+        headers: {
+          authorization: `Bearer ${cookies.token}`,
+        },
+      })
+      .then((res) => {
+        const task = res.data;
+        setTitle(task.title);
+        setDetail(task.detail);
+        setLimit(task.limit);
+        setIsDone(task.done);
+      })
+      .catch((err) => {
+        setErrorMessage(`タスク情報の取得に失敗しました。${err}`);
+      });
+  }, []);
 
   return (
     <div>
@@ -144,17 +148,13 @@ export const EditTask = () => {
           <br />
           <label>期限</label>
           <br />
-          <DatePicker
-            selected={deadline}
-            onChange={handleDeadlineChange}
-            className="new-task-deadline"
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            dateFormat="yyyy/MM/dd HH:mm"
+          <input
+            type="datetime-local"
+            onChange={handleLimitChange}
+            className="edit-task-limit"
+            value={dayjs(limit).format("YYYY-MM-DDTHH:mm:ss")}
           />
           <br />
-          <p className="remaining-time">期限まで残り時間: {formatDeadline}</p>
           <button
             type="button"
             className="delete-task-button"

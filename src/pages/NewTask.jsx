@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import dayjs from "dayjs";
 import { url } from "../const";
 import { Header } from "../components/Header";
 import "./newTask.scss";
 import { useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export const NewTask = () => {
@@ -13,21 +13,21 @@ export const NewTask = () => {
   const [lists, setLists] = useState([]);
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
-  const [deadline, setDeadline] = useState(new Date());
+  const [limit, setLimit] = useState();
   const [formatDeadline, setformatDeadline] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [cookies] = useCookies();
   const navigate = useNavigate();
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
+  const handleLimitChange = (e) => setLimit(e.target.value);
   const handleSelectList = (id) => setSelectListId(id);
-  const handleDeadlineChange = (date) => setDeadline(date);
   const onCreateTask = () => {
     const data = {
       title,
       detail,
       done: false,
-      deadline,
+      limit: dayjs(limit).format("YYYY-MM-DDTHH:mm:ss[Z]"),
     };
 
     axios
@@ -59,22 +59,6 @@ export const NewTask = () => {
         setErrorMessage(`リストの取得に失敗しました。${err}`);
       });
   }, []);
-
-  useEffect(() => {
-    const calculateRemainingTime = () => {
-      if (deadline) {
-        const now = new Date();
-        const deadlineDate = new Date(deadline);
-        const diff = Math.floor(deadlineDate - now) / 60000;
-        const days = Math.floor(diff / 1440);
-        const hours = Math.floor((diff % 1440) / 60);
-        const minutes = Math.floor(diff % 60);
-
-        setformatDeadline(`${days}日${hours}時間${minutes}分`);
-      }
-    };
-    calculateRemainingTime();
-  }, [deadline]);
 
   return (
     <div>
@@ -114,17 +98,11 @@ export const NewTask = () => {
           <br />
           <label>期限</label>
           <br />
-          <DatePicker
-            selected={deadline}
-            onChange={handleDeadlineChange}
-            className="new-task-deadline"
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            dateFormat="yyyy/MM/dd HH:mm"
+          <input
+            type="datetime-local"
+            onChange={handleLimitChange}
+            className="new-task-limit"
           />
-          <br />
-          <p className="remaining-time">期限まで残り時間: {formatDeadline}</p>
           <button
             type="button"
             className="new-task-button"

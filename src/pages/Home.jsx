@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import dayjs from "dayjs";
 import { Header } from "../components/Header";
 import { url } from "../const";
 import "./home.scss";
@@ -134,6 +135,7 @@ export const Home = () => {
 // 表示するタスク
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
+
   if (tasks === null) return <></>;
 
   if (isDoneDisplay === "done") {
@@ -151,7 +153,20 @@ const Tasks = (props) => {
               >
                 {task.title}
                 <br />
+                <p>{`期限: ${dayjs(task.limit ?? "").format(
+                  "YYYY/MM/DD HH:mm:ss"
+                )}`}</p>
+                <br />
                 {task.done ? "完了" : "未完了"}
+                <br />
+                <p>{`残り時間: ${Math.floor(
+                  dayjs(task.limit ?? "").diff(new Date()) / 864e5
+                )}日 ${Math.floor(
+                  (dayjs(task.limit ?? "").diff(new Date()) % 864e5) / 3600e5
+                )}時間 ${Math.floor(
+                  (dayjs(task.limit ?? "").diff(new Date()) % 3600e5) / 60e5
+                )}分`}</p>
+                <br />
               </Link>
             </li>
           ))}
@@ -173,7 +188,19 @@ const Tasks = (props) => {
             >
               {task.title}
               <br />
+              <p>{`期限: ${dayjs(task.limit ?? "").format(
+                "YYYY/MM/DD HH:mm:ss"
+              )}`}</p>
+              <br />
               {task.done ? "完了" : "未完了"}
+              <br />
+              <p>{`残り時間: ${Math.floor(
+                dayjs(task.limit ?? "").diff(new Date()) / 864e5
+              )}日 ${Math.floor(
+                (dayjs(task.limit ?? "").diff(new Date()) % 864e5) / 3600e5
+              )}時間 ${Math.floor(
+                (dayjs(task.limit ?? "").diff(new Date()) % 3600e5) / 60e5
+              )}分`}</p>
             </Link>
           </li>
         ))}
