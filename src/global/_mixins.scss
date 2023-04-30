@@ -1,7 +1,15 @@
 $header-display: flex;
 $header-justify-content: space-between;
 
+$display: flex;
+$flex-direction: column;
+
 @mixin header-position {
   display: $header-display;
   justify-content: $header-justify-content;
+}
+
+@mixin list-task-position {
+  display: $display;
+  flex-direction: $flex-direction;
 }

@@ -6,13 +6,12 @@
   //width: 1000px;
   //margin: 0 auto;
 
-  display: flex;
-  flex-direction: column;
+  @include mix.list-task-position;
 }
 
 .edit-task-form {
   color: var.$secondary-color;
-  flex: 1;
+  flex: var.$form-flex;
 }
 
 .edit-task-title,
