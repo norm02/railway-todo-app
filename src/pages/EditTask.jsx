@@ -15,7 +15,6 @@ export const EditTask = () => {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
   const [limit, setLimit] = useState("");
-  const [formatDeadline, setformatDeadline] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);

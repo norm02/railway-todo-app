@@ -7,6 +7,7 @@
   margin: 50px auto;
   list-style: none;
   width: 100%;
+  flex-direction: column;
 
   .list-header {
     @include mix.header-position;
@@ -20,6 +21,7 @@
     list-style: none;
     display: flex;
     overflow-x: auto;
+    flex-wrap: wrap;
 
     .list-tab-item {
       flex-shrink: 0;

@@ -65,6 +65,7 @@ export const Home = () => {
         setErrorMessage(`タスクの取得に失敗しました。${err}`);
       });
   };
+
   return (
     <div>
       <div></div>
@@ -136,49 +137,45 @@ export const Home = () => {
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
 
+  const days = [];
+  const hours = [];
+  const minutes = [];
+
   if (tasks === null) return <></>;
 
   if (isDoneDisplay === "done") {
-    return (
-      <ul>
-        {tasks
-          .filter((task) => {
-            return task.done === true;
-          })
-          .map((task, key) => (
-            <li key={key} className="task-item">
-              <Link
-                to={`/lists/${selectListId}/tasks/${task.id}`}
-                className="task-item-link"
-              >
-                {task.title}
-                <br />
-                <p>{`期限: ${dayjs(task.limit ?? "").format(
-                  "YYYY/MM/DD HH:mm:ss"
-                )}`}</p>
-                <br />
-                {task.done ? "完了" : "未完了"}
-                <br />
-                <p>{`残り時間: ${Math.floor(
-                  dayjs(task.limit ?? "").diff(new Date()) / 864e5
-                )}日 ${Math.floor(
-                  (dayjs(task.limit ?? "").diff(new Date()) % 864e5) / 3600e5
-                )}時間 ${Math.floor(
-                  (dayjs(task.limit ?? "").diff(new Date()) % 3600e5) / 60e5
-                )}分`}</p>
-                <br />
-              </Link>
-            </li>
-          ))}
-      </ul>
-    );
+    tasks
+      .filter((task) => {
+        return task.done === true;
+      })
+      .forEach((task) => {
+        const limit = task.limit ?? "";
+        const now = new Date();
+        const diff = dayjs(limit).diff(now);
+        days.push(Math.floor(diff / 864e5));
+        hours.push(Math.floor((diff % 864e5) / 3600e5));
+        minutes.push(Math.floor((diff % 3600e5) / 60e5));
+      });
+  } else {
+    tasks
+      .filter((task) => {
+        return task.done === false;
+      })
+      .forEach((task) => {
+        const limit = task.limit ?? "";
+        const now = new Date();
+        const diff = dayjs(limit).diff(now);
+        days.push(Math.floor(diff / 864e5));
+        hours.push(Math.floor((diff % 864e5) / 3600e5));
+        minutes.push(Math.floor((diff % 3600e5) / 60e5));
+      });
   }
 
   return (
     <ul>
       {tasks
         .filter((task) => {
-          return task.done === false;
+          return task.done === isDoneDisplay;
         })
         .map((task, key) => (
           <li key={key} className="task-item">
@@ -194,13 +191,7 @@ const Tasks = (props) => {
               <br />
               {task.done ? "完了" : "未完了"}
               <br />
-              <p>{`残り時間: ${Math.floor(
-                dayjs(task.limit ?? "").diff(new Date()) / 864e5
-              )}日 ${Math.floor(
-                (dayjs(task.limit ?? "").diff(new Date()) % 864e5) / 3600e5
-              )}時間 ${Math.floor(
-                (dayjs(task.limit ?? "").diff(new Date()) % 3600e5) / 60e5
-              )}分`}</p>
+              <p>{`残り時間: ${days[key]}日 ${hours[key]}時間 ${minutes[key]}分`}</p>
             </Link>
           </li>
         ))}
